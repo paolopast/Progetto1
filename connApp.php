@@ -1,7 +1,7 @@
 <?php
 $mysqli = new MySQLi('localhost', 'root','','my_durresarchmuseum');
 mysqli_set_charset($mysqli, 'utf8');
-$query = "SELECT id, nome, anno, autore, materiale, categoria, urlVideo, tecnica, periodoStorico, dimensioni, peso, valore, infoStoriche, descrizione FROM opera" ;
+$query = "SELECT id, nome, anno, autore, materiale, categoria, urlVideo, urlAudio, tecnica, periodoStorico, dimensioni, peso, valore, infoStoriche, descrizione FROM opera" ;
 $res = mysqli_query($mysqli, $query);
 $temp_array = array();
 while($row = $res->fetch_assoc())
@@ -15,6 +15,7 @@ while($row = $res->fetch_assoc())
           'materiale' => $row['materiale'],
           'categoria' => $row['categoria'],
           'urlVideo' => $row['urlVideo'],
+          'urlAudio' => $row['urlAudio'],
           'tecnica' => $row['tecnica'],
           'periodoStorico' => $row['periodoStorico'],
           'dimensioni' => $row['dimensioni'],

@@ -61,7 +61,7 @@
 
     <div class ="content">
     	<div class = "titlebox">
-        Gestione Operatori
+        Gestione Sedi
         </div>
 		<div class ="buttonBox">
 		<button class="action bluebtn" onclick="javascript:document.location='addSede.php'"><span class="label">+ Add Sede</span></button>

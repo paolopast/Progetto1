@@ -65,10 +65,12 @@
 		$res2 =$mysqli->query("SELECT * FROM sede");
     ?>
 		<div class = 'titlebox'>Add Event<br/></div>
+        <font color = 'red'>
 	<?php
 		if(isset($_GET['err']) === true)
 			echo "Inserisci i valori obbligatori";
     ?>
+    </font>
 		<form name = 'modify' action = 'saveNuovoEvento.php' method = 'POST'>
     	<label>Titolo evento*:</label>
    		<input name = 'titolo' rows 1></textarea><br/><br/>

@@ -104,12 +104,22 @@
 		<br/><br/>
 		<fieldset>
         <legend>Is admin?* </legend>
-        yes <input type='radio' name='amministratore' value='true'/>
-		no <input type='radio' name='amministratore' value='false'/>
+        <?php
+        if($row['ammministratore'] === 'true')
+        {?>
+        	yes <input type='radio' name='amministratore' value='true' checked />
+			no <input type='radio' name='amministratore' value='false'/>
+        <?php
+        }
+        else
+        {?>
+            yes <input type='radio' name='amministratore' value='true'/>
+			no <input type='radio' name='amministratore' value='false' checked />
+        <?php }?>
   		</fieldset><br/>
 		<button type='submit'>Salva Modifiche</button><br/>
     	</form>
-		<br/>";
+		<br/>
 
         <button onclick="window.location.href='deleteOperatore.php?username=<?php echo $_GET['username'];?>'">Cancella Operatore</button>
     </div>

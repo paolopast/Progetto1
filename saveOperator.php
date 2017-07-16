@@ -3,8 +3,6 @@
 	session_start();
 	if($_SESSION['loginlev'] !== 1)
 		header('location: missAutentication.php');
-        require('csrfpphplibrary/libs/csrf/csrfprotector.php');
-csrfProtector::init();
 ?>
 
 
@@ -59,8 +57,11 @@ csrfProtector::init();
 	else
 		$dataN = $_POST['dataN'];
 	
-	if($_POST['amministratore'] === '')
+	if($_POST['amministratore'] !== 'true' && $_POST['amministratore'] !== 'false')
+    {
 		header('location: addOperatore.php?err=1');
+        return;
+    }
 	else
 		$amministratore = $_POST['amministratore'];
 	
@@ -75,20 +76,21 @@ csrfProtector::init();
 		$sede_id = $_POST['sede_id'];
 
 	$password = generaPwdCasuale();
-	//esecuzione query
-
-    if (isset($_SERVER[‘HTTP_REFERER’]) && $_SERVER[‘HTTP_REFERER’]!=””)
-  {
-  if (strpos($_SERVER['HTTP_REFERER'],$_SERVER['HTTP_HOST'])===false)
+    
+    //Controllo che l'username sia disponibile
+    $contr = $PDO->prepare("SELECT* FROM operatoremuseo WHERE username = ?");
+    $contr->execute(array($username));
+    if($contr->rowCount() > 0)
     {
-    echo "accesso negato";
+    	echo 'Username esistente';
+        return;
     }
-  }
-  else{
-		$stmt = $PDO->prepare('INSERT INTO operatoremuseo(nome, cognome, cf, dataNascita, ammministratore, citta, sede_id, username, password, email, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-	$stmt->execute( array($nome,$cognome,$cf, $dataNascita, $ammministratore, $citta, $sede_id, $username, $password, $email, $telefono));
-
-echo "La password per l'utente appena registrato e': ".$password;
+    else{
+	//esecuzione query
+	$stmt = $PDO->prepare("INSERT INTO operatoremuseo(nome, cognome, cf, dataNascita, ammministratore, citta, sede_id, username, password, email, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$stmt->execute( array($nome,$cognome,$cf, $dataN, $amministratore, $citta, $sede_id, $username, $password, $email, $telefono));
+	mail($email, 'Credenziali accesso', "Benvenuto nuovo operatore!\n\nQueste sono le sue credenziali per accedere al sito del nostro museo\n\nUsername: ".$username."\nPassword: ".$password."\n\n\n", 'From: paolo.pastore.95@gmail.com');
+	header('location: gestOperatori.php');
 }
 
 

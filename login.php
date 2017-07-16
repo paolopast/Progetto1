@@ -65,10 +65,12 @@ session_start();
     <label>Username</label>
     <input type = "text" name = "username" value = ""/><br/><br/>
     <label>Password&nbsp;</label>
-    <input type = "password" name = "pwd" value = ""/><br/><br/>
+    <input type = "text" name = "pwd" value = ""/><br/><br/>
     <button type="submit">Submit</button>
     </form>
-
+    <form name = "login" action = "recupera.php" method = "POST">
+    <button type="submit">Password dimenticata?</button>
+    </form>
 	</div>
 </div>
 

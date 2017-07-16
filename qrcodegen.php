@@ -11,22 +11,22 @@
 require("phpqrcode/qrlib.php");
  
 // ECC Level, livello di correzione dell'errore (valori possibili in ordine crescente: L,M,Q,H - da low a high)
-$errorCorrectionLevel = 'L';
+$errorCorrectionLevel = 'H';
 
 // Matrix Point Size, dimensione dei punti della matrice (da 1 a 10)
-$matrixPointSize = 6;
+$matrixPointSize = 10;
 
 // I dati da codificare nel QRcode
-$data = $_GET['id'];
+$data = 'asdfg'.$_GET['id'];
 
 // Il File da salvare (deve essere salvato in una directory scrivibile dal web server)
 $filename = 'QRcodes/qrcode' . $data.'.png';
 
 // Generiamo il QRcode in formato immagine PNG
-QRcode::png($data, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+QRcode::png($data, $filename, $errorCorrectionLevel, $matrixPointSize, 10);
 
 //atampa del codice
 ?>
-<td><img src ='QRcodes/qrcode" . $data.".png'></td>
+<td><img src ='QRcodes/qrcode<?php echo $data?>.png'></td>
 </body>
 </html>

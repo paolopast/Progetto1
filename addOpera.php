@@ -64,7 +64,7 @@
 		$mysqli = new MySQLi("localhost", "root","", "my_durresarchmuseum");
 		$res2 =$mysqli->query("SELECT * FROM sede");    
 	?>
-    	<div class = 'titlebox'>Add Operator<br/></div>
+    	<div class = 'titlebox'>Add new Opera<br/></div>
 	<?php
 		if(isset($_GET['err']) === true)
 		echo "Inserisci i valori obbligatori";

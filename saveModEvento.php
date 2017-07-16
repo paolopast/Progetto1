@@ -3,8 +3,6 @@
 	session_start();
 	if($_SESSION['loginlev'] !== 1)
 		header('location: missAutentication.php');
-        require('csrfpphplibrary/libs/csrf/csrfprotector.php');
-csrfProtector::init();
 ?>
 
 

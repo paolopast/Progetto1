@@ -1,8 +1,10 @@
 <?php
 //avvio sessione
 	session_start();
-	if($_SESSION['loginlev'] !== 1)
+	if($_SESSION['loginlev'] !== 1 && $_SESSION['loginlev'] !== 2)
 		header('location: missAutentication.php');
+                require('csrfpphplibrary/libs/csrf/csrfprotector.php');
+csrfProtector::init();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -67,20 +69,28 @@
 		$row = $res->fetch_assoc();
     ?>
     	<div class = 'titlebox'>Gestione Account</div>
+        In questa pagina potrai modificare il tuo indirizzo email o la tua password<br/><br/>
+        <font color = 'red'>
     <?php 
-    	if(isset($_GET['err']) === true)
+    	if(isset($_GET['err']) === true && $_GET['err'] === '1')
 			echo "Inserisci i valori obbligatori";
+        else if(isset($_GET['err']) === true && $_GET['err'] === '2')
+        	echo "Le due password non corrispondono";
+        else if(isset($_GET['err']) === true && $_GET['err'] === '3')
+        	echo "Password non valida";
     ?>
-		In questa pagina potrai modificare il tuo indirizzo email o la tua password<br/><br/>
+    </font>
+    	<br/>
+		<br/>
     	<form name = 'modify' action = 'saveModAccount.php' method = 'POST'>
     	<label>E-mail*:</label><br/>
    		<input name = 'email' rows 1 value = '<?php echo htmlspecialchars($row['email'])?>'><br/><br/>
     	<label>Password*:</label><br/>
     	<input type='password' name = 'pwd1'><br/><br/>
-        <label>Ripeti password*:</label><br/>
-    	<input type = 'password' name = 'pwd2'><br/><br/>
         <label>Nuova password*:</label><br/>
-    	<input type = 'password' name = 'newpwd'><br/><br/>	
+    	<input type = 'password' name = 'newpwd'><br/><br/>
+        <label>Ripeti nuova password*:</label><br/>
+    	<input type = 'password' name = 'newpwd2'><br/><br/>	
 		<button type='submit'>Salva Modifiche</button>
     	</form>
     </div>

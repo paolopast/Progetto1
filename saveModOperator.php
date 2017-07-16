@@ -3,8 +3,6 @@
 	session_start();
 	if($_SESSION['loginlev'] !== 1)
 		header('location: missAutentication.php');
-        require('csrfpphplibrary/libs/csrf/csrfprotector.php');
-csrfProtector::init();
 ?>
 
 
@@ -117,7 +115,7 @@ if (isset($_SERVER[‘HTTP_REFERER’]) && $_SERVER[‘HTTP_REFERER’]!=””)
 	$stmt->execute( array($nome,$cognome,$cf, $dataN, $amministratore, $citta, $sede_id, $email, $telefono, $_GET['username']));
 }
 
-
+header('location: gestOperatori.php');
 
 ?>
 </body>

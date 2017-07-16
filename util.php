@@ -6,11 +6,7 @@ function menuPrivato($loginlev)
 	define('MIN', 2);
 	if(isset($loginlev))
 	{
-		if($loginlev=== MIN || $loginlev === MAX )
-		{
-			$logoutstr = "<li><a href='logout.php'>Logout</a></li>";
-			echo $logoutstr;
-		}
+
 		if($loginlev === MIN || $loginlev === MAX )
 		{
 			$gestopstr = "<li><a href='gestop.php'>Gestione Opere</a></li>";
@@ -30,8 +26,19 @@ function menuPrivato($loginlev)
 		{
 			$gestsedistr = "<li><a href='gestSedi.php'>Gestione Sedi</a></li>";
 			echo $gestsedistr;
+		} 
+        if($loginlev=== MIN || $loginlev === MAX )
+		{
+			$logoutstr = "<li><a href='logout.php'>Logout</a></li>";
+			echo $logoutstr;
+		}
+        if($loginlev=== MIN || $loginlev === MAX )
+		{
+			$geststr = "<li><a href='gestioneAcc.php'>Gestione Account</a></li>";
+			echo $geststr;
 		}
 	}
+
 	else
 	{
 		$loginstr = "<li><a href='login.php'>Login</a></li>";
@@ -98,7 +105,7 @@ function printInfoOpera($id)
 			  $res = $mysqli->query("SELECT* FROM opera WHERE id = ".$id);
 			  while($row = $res->fetch_assoc())
 			  {
-				  ?>"<b><h2><?php echo htmlspecialchars($row['nome']) ?></h2></b><br/>
+				  ?><b><h2><?php echo htmlspecialchars($row['nome']) ?></h2></b><br/>
 				  <?php
 				  if($row['urlFoto'] !== null)
 				  {
@@ -107,12 +114,12 @@ function printInfoOpera($id)
 				  }
 				  if($row['urlVideo'] !== null)
 				  {
-				  	$str = "<object data='".$row['urlVideo']."' type='video/mp4' width='560' height='315' autostart = 'false'></object><br/><br/>";
+				  	$str = "<video controls><source src='".$row['urlVideo']."' type='video/mp4' width='560' height='315' autoplay= 'false' /></video><br/><br/>";
 					echo $str;
 				  }
 				  if($row['urlAudio'] !== null)
 				  {
-				  	$str = "<object data='".$row['urlAudio']."'></object><br/><br/>";
+				  	$str = "<audio controls><source src='".$row['urlAudio']."' type = 'audio/mpeg' autoplay = 'false' width = '700' height = '100' /></audio><br/><br/>";
 					echo $str;
 				  }
 				  if($row['anno'] !== null)

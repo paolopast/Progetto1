@@ -58,7 +58,7 @@ session_start();
 
     <div class ="content">
     	<div class = "titlebox">
-        Welcome to the Durres Archeological Museum website
+        Our contacts
         </div>
         
 		<div class ="colonnaMeta">

@@ -23,21 +23,29 @@
 	$PDO = new PDO($col , 'root', '');
 	$PDO->beginTransaction();
 	$sql = "SELECT * FROM operatoremuseo WHERE username= " . $PDO->quote($_POST['username']). "AND password = ".$PDO->quote($password);
-	foreach($PDO->query($sql) as $row)
-	{
-		if(	$row['ammministratore'] === 'true')
+	$res = $PDO->query($sql);
+    if ($res->rowCount() > 0)
+    {
+    	foreach($PDO->query($sql) as $row)
 		{
-			$_SESSION['loginlev'] = 1;
+			if(	$row['ammministratore'] === 'true')
+			{
+				$_SESSION['loginlev'] = 1; 
+                
+               
+			}
+			else if($row['ammministratore'] === 'false')
+			{
+				$_SESSION['loginlev'] = 2;
+				
+			}
+            $_SESSION['username'] = $row['username'];
 			header('location: home.php');
 		}
-		else if($row['ammministratore'] === 'false')
-		{
-			$_SESSION['loginlev'] = 2;
-			header('location: home.php');
-		}
-		$_SESSION['username'] = $row['username'];
-	}
-	header('location: home.php');
+     }
+        else
+            echo 'Authentication error';
+	
 ?>
 </body>
 </html>

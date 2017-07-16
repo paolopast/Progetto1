@@ -15,5 +15,5 @@ csrfProtector::init();
 	$sql->execute();
         $result = 'CSRF check passed. Form parsed.';
   
- 
+ header('location: gestEv.php')
 ?>

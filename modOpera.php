@@ -122,13 +122,26 @@
 		<br/><br/>
 		<fieldset>
 		<legend>E' un'originale?* </legend>
-        yes <input type='radio' name='original' value='true'/>
+        <?php if($row['original'] === 'true'){
+        ?>
+        yes <input type='radio' name='original' value='true' checked/>
 		no <input type='radio' name='original' value='false'/>
+        <?php 
+        }else {?>
+        yes <input type='radio' name='original' value='true'/>
+		no <input type='radio' name='original' value='false' checked/>
+        <?php } ?>
   		</fieldset><br/>
 		<fieldset>
         <legend>Si vuole pubblicare l'opera sul sito web?* </legend>
-        yes <input type='radio' name='pubblicata' value='true'/>
+        <?php if($row['pubblicata'] === 'true'){?>
+        yes <input type='radio' name='pubblicata' value='true' checked/>
 		no <input type='radio' name='pubblicata' value='false'/>
+        <?php
+        }else{?>
+        yes <input type='radio' name='pubblicata' value='true'/>
+		no <input type='radio' name='pubblicata' value='false' checked/>
+       <?php }?>
   		</fieldset><br/>
 		<label>Luogo Origine:</label><br/>
     	<input name = 'luogoOrigine' value = '<?php echo $row['luogoOrigine'] ?>'/><br/><br/>
@@ -162,7 +175,7 @@
         
 		<button type='submit'><b>Salva Modifiche</b></button><br/></form>
 
-        <button onclick="window.location.href='deleteOpera.php?id=<?php echo $_GET['id'];?>'">Continue</button>
+        <button onclick="window.location.href='deleteOpera.php?id=<?php echo $_GET['id'];?>'"><b>Cancella opera</b></button>
 		
 		<br/><a href='qrcodegen.php?id=<?php echo $_GET['id']?>'><button class='action bluebtn'><span class='label'><b>Stampa QR-code opera</b></span></button>
 		

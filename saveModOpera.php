@@ -3,8 +3,6 @@
 	session_start();
 	if($_SESSION['loginlev'] !== 1)
 		header('location: missAutentication.php');
-        require('csrfpphplibrary/libs/csrf/csrfprotector.php');
-csrfProtector::init();
 ?>
 
 
@@ -21,7 +19,6 @@ csrfProtector::init();
 	//dichiarazione variabili
 	//Si fanno dei controlli per assicurarsi che nel caso in cui non sia stato inserito nulla si possa mettere il valore NULL nel database
 	if($_POST['nome'] === '')
-    {
     {
 		$strdest = 'modOpera.php?err=1&id='.$_GET['id'];
         $strdest = rawurlencode($strdest);
@@ -234,11 +231,189 @@ csrfProtector::init();
 	else
 		$sede_id = $_POST['sede_id'];	
 
+	$mysqli = new mysqli('localhost','root','','my_durresarchmuseum');
+    $res = $mysqli->query('SELECT* FROM opera WHERE id = '.$_GET['id']);
+    if (mysqli_num_rows($res) > 0)
+    {
+    	$row = $res->fetch_assoc();
+		if (!isset($_FILES['userfile']) || !is_uploaded_file($_FILES['userfile']['tmp_name'])) 
+        {
+ 			echo 'Non hai inviato nessun file...'; 
+		}
+
+		if (!isset($_FILES['userfile']) || !is_uploaded_file($_FILES['userfile']['tmp_name']))
+    	{
+  			echo 'Non hai inviato nessun file...'; 
+            if($row['urlFoto'] === null)
+            	$urlFoto = 'NULL';
+            else
+ 				$urlFoto = "'".$row['urlFoto']."'";
+		}
+
+		if ($_FILES['userfile']['size'] > 4194304) 
+    	{
+ 			echo 'Il file è troppo grande!';
+            if($row['urlFoto'] === null)
+            	$urlFoto = 'NULL';
+            else
+ 				$urlFoto = "'".$row['urlFoto']."'";
+		}
+    
+    	$target_file = 'upload/' . $_FILES['userfile']['name'];
+		if (file_exists($target_file)) 
+    	{
+ 			echo 'Il file esiste già';
+            if($row['urlFoto'] === null)
+            	$urlFoto = 'NULL';
+            else
+ 				$urlFoto = "'".$row['urlFoto']."'";
+		}
+		//percorso della cartella dove mettere le immagini caricate dagli utenti
+		$uploaddir = 'upload/';
+	
+		//Recupero il percorso temporaneo del file
+		$userfile_tmp = $_FILES['userfile']['tmp_name'];
+	
+		//recupero il nome originale del file caricato
+		$userfile_name = $_FILES['userfile']['name'];
+
+		//copio il file dalla sua posizione temporanea alla mia cartella upload
+		if (move_uploaded_file($userfile_tmp, $uploaddir . $userfile_name) === true) {
+  		//Se l'operazione è andata a buon fine...
+  		echo 'File inviato con successo.';
+  		$urlFoto = "'".$uploaddir . $userfile_name."'";
+		}
+    	else
+    	{
+  		//Se l'operazione è fallta...
+  		echo 'Upload NON valido!'; 
+            if($row['urlFoto'] === null)
+            	$urlFoto = 'NULL';
+            else
+ 				$urlFoto = "'".$row['urlFoto']."'";
+		}	
 
 
 
+		//percorso della cartella dove mettere i file audio caricati dagli utenti
+		$uploaddirA = 'uploadAudio/';
 
+		//Recupero il percorso temporaneo del file
+		$userfile_tmpA = $_FILES['audiofile']['tmp_name'];
 
+		//recupero il nome originale del file caricato
+		$userfile_nameA = $_FILES['audiofile']['name'];
+
+		if (!isset($_FILES['audiofile']) || !is_uploaded_file($_FILES['audiofile']['tmp_name']))
+    	{
+  			echo 'Non hai inviato nessun file...'; 
+            if($row['urlAudio'] === null)
+            	$urlAudio = 'NULL';
+            else
+ 				$urlAudio = "'".$row['urlAudio']."'";
+		}
+	
+		if ($_FILES['audiofile']['size'] > 10000000) 
+	    {
+	 		echo 'Il file è troppo grande!';
+            if($row['urlAudio'] === null)
+            	$urlAudio = 'NULL';
+            else
+ 				$urlAudio = "'".$row['urlAudio']."'";
+		}
+	    
+	    $target_file = 'uploadAudio/' . $_FILES['audiofile']['name'];
+		if (file_exists($target_file)) 
+	    {
+	 		echo 'Il file esiste già';
+            if($row['urlAudio'] === null)
+            	$urlAudio = 'NULL';
+            else
+ 				$urlAudio = "'".$row['urlAudio']."'";
+		}
+		//copio il file dalla sua posizione temporanea alla mia cartella upload
+		if (move_uploaded_file($userfile_tmpA, $uploaddirA . $userfile_nameA) === true) {
+		//Se l'operazione è andata a buon fine...
+  		echo 'File inviato con successo.';
+  		$urlAudio = "'".$uploaddirA . $userfile_nameA."'";
+		}
+        else	
+        {
+  		//Se l'operazione è fallta...
+  		echo 'Upload NON valido!'; 
+        if($row['urlAudio'] === null)
+          	$urlAudio = 'NULL';
+        else
+ 			$urlAudio = "'".$row['urlAudio']."'";
+		}
+		//percorso della cartella dove mettere i file caricati dagli utenti
+		$uploaddirV = 'uploadVideo/';
+	
+		//Recupero il percorso temporaneo del file
+		$userfile_tmpV = $_FILES['videofile']['tmp_name'];
+
+		//recupero il nome originale del file caricato
+		$userfile_nameV = $_FILES['videofile']['name'];
+
+		if (!isset($_FILES['videofile']) || !is_uploaded_file($_FILES['videofile']['tmp_name']))
+    	{
+  			echo 'Non hai inviato nessun file...'; 
+            if($row['urlVideo'] === null)
+            	$urlVideo = 'NULL';
+            else
+ 				$urlVideo = "'".$row['urlVideo']."'";
+		}
+	
+		if ($_FILES['videofile']['size'] > 44194304) 
+    	{
+ 			echo 'Il file è troppo grande!';
+ 			if($row['urlVideo'] === null)
+            	$urlVideo = 'NULL';
+            else
+ 				$urlVideo = "'".$row['urlVideo']."'";
+		}
+    	
+    	$target_file = 'uploadVideo/' . $_FILES['videofile']['name'];
+		if (file_exists($target_file)) 
+    	{
+ 			echo 'Il file esiste già';
+            if($row['urlVideo'] === null)
+            	$urlVideo = 'NULL';
+            else
+ 				$urlVideo = "'".$row['urlVideo']."'";
+		}
+		//copio il file dalla sua posizione temporanea alla mia cartella upload
+		if (move_uploaded_file($userfile_tmpV, $uploaddirV . $userfile_nameV) === true) {
+		//Se l'operazione è andata a buon fine...
+  		echo 'File inviato con successo.';
+  		$urlVideo = "'".$uploaddirV . $userfile_nameV."'";
+		}
+        else
+        {
+  		//Se l'operazione è fallta...
+  		echo 'Upload NON valido!'; 
+            if($row['urlVideo'] === null)
+            	$urlVideo = 'NULL';
+            else
+ 				$urlVideo = "'".$row['urlVideo']."'";
+		}	
+		
+		$mysqli = new MySQLi("localhost", "root", "", "my_durresarchmuseum");
+		$sql = "UPDATE opera SET nome ='".$nome."',anno=".$anno.",autore = ".$autore.",proprietario='".$proprietario."',numPass=".$numPass.",location=".$location.",materiale='".$materiale."',categoria='".$categoria."',urlFoto=".$urlFoto.",urlVideo=".$urlVideo.", urlAudio=".$urlAudio.", dataRicezione=".$dataRicezione.",tecnica='".$tecnica."',periodoStorico=".$periodoStorico.",dimensioni=".$dimensioni.",peso=".$peso.",valore=".$valore.",dittaConsegna=".$dittaConsegna.",integrita='".$integrita."',original='".$original."',luogoOrigine=".$luogoOrigine.",infoStoriche=".$infoStoriche.",descrizione=".$descrizione.",restauriEffettuati=".$restauriEffettuati.",dataPubblicazione=".$dataPubblicazione.",sede_id='".$sede_id."',pubblicata='".$pubblicata."' WHERE id = ".$_GET['id'];
+        
+		if ($mysqli->query($sql) === false) {
+      	echo "Error updating record: " . $mysqli->error;
+		}
+		else
+		{
+		echo "query eseguita";
+		
+		}
+	
+		header('location: gestop.php');
+}
+else
+echo "error";
 
 ?>
 </body>

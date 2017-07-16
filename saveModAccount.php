@@ -3,8 +3,6 @@
 	session_start();
 	if($_SESSION['loginlev'] !== 1)
 		header('location: missAutentication.php');
-        require('csrfpphplibrary/libs/csrf/csrfprotector.php');
-csrfProtector::init();
 ?>
 
 
@@ -29,39 +27,40 @@ csrfProtector::init();
 	else
 		$email = $_POST['email'];
 		
-	if($_POST['pwd1'] === '')
+	if($_POST['pwd'] === '')
 		header('location: gestioneAcc.php?err=1');
 	else
-		$pwd1 = $_POST['pwd1'];
+		$pwd = $_POST['pwd1'];
 	
-	if($_POST['pwd2'] === '')
+	if($_POST['newpwd2'] === '')
 		header('location: gestioneAcc.php?err=1');
 	else
-		$pwd2 = $_POST['pwd2'];
+		$newpwd2 = $_POST['pwd2'];
 		
 	if($_POST['newpwd'] === '')
 		header('location: gestioneAcc.php?err=1');
 	else
 		$newpwd = $_POST['newpwd'];
 	
-	if($_POST['pwd1'] !== $_POST['pwd2'])
-		header('location: gestioneAcc.php?err=1');
+	if($_POST['newpwd'] !== $_POST['newpwd2'])
+		header('location: gestioneAcc.php?err=2');
 	//esecuzione query
 	
-if (isset($_SERVER[‘HTTP_REFERER’]) && $_SERVER[‘HTTP_REFERER’]!=””)
-  {
-  if (strpos($_SERVER['HTTP_REFERER'],$_SERVER['HTTP_HOST'])===false)
-    {
-    echo "accesso negato";
-    }
-  }
   else{
-	$stmt = $PDO->prepare( 'UPDATE operatoremuseo SET email = ?, password = ? WHERE username = ?');
-	$stmt->execute( array($email,$newpwd,$username));
+  	$mysqli = new mysqli('localhost','root','','my_durresarchmuseum');
+    $res = $mysqli->query("SELECT* FROM operatoremuseo WHERE username = '".$username."'");
+    echo mysqli_num_rows($res);
+    echo $username;
+    $row = $res->fetch_assoc();
+    if($row['password'] !== $pwd)
+    	header('location: gestioneAcc.php?err=3');
+    else
+    {
+		$stmt = $PDO->prepare( 'UPDATE operatoremuseo SET email = ?, password = ? WHERE username = ?');
+		$stmt->execute( array($email,$newpwd,$username));
+        header('location: home.php');
 	}
-
-
-header('location: home.php');
+}
 
 ?>
 </body>
